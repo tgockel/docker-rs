@@ -2,12 +2,12 @@
 #![doc(html_root_url="https://ghmlee.github.io/rust-docker/doc")]
 
 // import external libraries
-extern crate openssl;
+//TODO: extern crate openssl;
 extern crate unix_socket;
 extern crate rustc_serialize;
 
 // declare modules
-mod tcp;
+//TODO: mod tcp;
 mod unix;
 mod http;
 mod test;

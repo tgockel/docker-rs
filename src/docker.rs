@@ -2,7 +2,7 @@ use std;
 use std::error::Error;
 use std::path::Path;
 
-use tcp::TcpStream;
+//TODO: use tcp::TcpStream;
 use unix::UnixStream;
 use http::{self, Response};
 
@@ -19,12 +19,12 @@ use rustc_serialize::json;
 pub struct Docker {
     protocol: Protocol,
     unix_stream: Option<UnixStream>,
-    tcp_stream: Option<TcpStream>,
+    // TODO: tcp_stream: Option<TcpStream>,
 }
 
 enum Protocol {
     UNIX,
-    TCP
+    //TODO: TCP
 }
 
 impl Docker {
@@ -41,7 +41,7 @@ impl Docker {
 
         let protocol = match protocol {
             "unix" => Protocol::UNIX,
-            "tcp" => Protocol::TCP,
+            // TODO: "tcp" => Protocol::TCP,
             _ => {
                 let err = std::io::Error::new(std::io::ErrorKind::InvalidInput,
                                               "The protocol is not supported.");
@@ -57,6 +57,7 @@ impl Docker {
             _ => None
         };
 
+        /* TODO
         let tcp_stream = match protocol {
             Protocol::TCP => {
                 let stream = try!(TcpStream::connect(&*path));
@@ -64,16 +65,23 @@ impl Docker {
             }
             _ => None
         };
+        */
 
         let docker = Docker {
             protocol: protocol,
             unix_stream: unix_stream,
-            tcp_stream: tcp_stream
+            // TODO: tcp_stream: tcp_stream,
         };
         return Ok(docker);
     }
 
+    /// Connect to the local Docker daemon.
+    pub fn connect_local() -> std::io::Result<Docker> {
+        Docker::connect("unix:///var/run/docker.sock")
+    }
+
     pub fn set_tls(&mut self, key: &Path, cert: &Path, ca: &Path) -> std::io::Result<()> {
+        /* TODO
         match self.tcp_stream {
             Some(_) => {
                 let mut tcp_stream = self.tcp_stream.as_mut().unwrap();
@@ -81,6 +89,7 @@ impl Docker {
             }
             None => {}
         }
+        */
 
         return Ok(());
     }
@@ -347,10 +356,12 @@ impl Docker {
                 let mut stream = self.unix_stream.as_mut().unwrap();
                 stream.read(buf)
             }
+            /* TODO
             Protocol::TCP => {
                 let mut stream = self.tcp_stream.as_mut().unwrap();
                 stream.read(buf)
             }
+            */
         };
     }
 
@@ -377,7 +388,7 @@ impl Clone for Docker {
     fn clone(&self)-> Self {
         let protocol = match self.protocol {
             Protocol::UNIX => Protocol::UNIX,
-            Protocol::TCP => Protocol::TCP
+            // TODO: Protocol::TCP => Protocol::TCP
         };
         
         let unix_stream = match self.unix_stream {
@@ -387,17 +398,19 @@ impl Clone for Docker {
             None => None
         };
 
+        /* TODO
         let tcp_stream = match self.tcp_stream {
             Some(ref tcp_stream) => {
                 Some(tcp_stream.clone())
             }
             None => None
         };
+        */
         
         let docker = Docker {
             protocol: protocol,
             unix_stream: unix_stream,
-            tcp_stream: tcp_stream
+            // TODO: tcp_stream: tcp_stream
         };
         return docker;
     }
